@@ -18,7 +18,7 @@ export default {
     new HtmlWebpackPlugin({
       title: 'TempText',
       template: path.join(__dirname, 'src', 'index.html'),
-      filename: 'index.html'
+      filename: path.join(__dirname, '..', 'index.html')
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contentHash].css'
