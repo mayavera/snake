@@ -190,7 +190,7 @@ window.onload = () => {
     }
 
     if (running) {
-      setTimeout(() => window.requestAnimationFrame(draw), 50)
+      setTimeout(() => window.requestAnimationFrame(draw), 80)
     }
   }
 
