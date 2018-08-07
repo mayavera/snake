@@ -29,3 +29,6 @@ test:
 
 test-watch:
 	nyc --reporter=lcov --reporter=html mocha test/**/*.test.js -w 
+
+serve:
+	http-server ../

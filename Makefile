@@ -25,3 +25,6 @@ lint:
 
 lint-fix:
 	pushd app; make lint-fix; popd
+
+serve:
+	pushd app; make serve; popd

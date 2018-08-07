@@ -53,18 +53,16 @@ function placeApple(board) {
 }
 
 window.onload = () => {
-  const boardWidth = 32
-  const boardHeight = 32
+  const canvas = document.getElementById('canvas')
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
+  const context = canvas.getContext('2d')
+
+  const boardWidth = Math.ceil(canvas.width / PIECE_WIDTH)
+  const boardHeight = Math.ceil(canvas.height / PIECE_HEIGHT)
   const board = ([...new Array(boardHeight)]).map(() => [...new Array(boardWidth).fill(PIECE_BLANK)])
 
   placeApple(board)
-
-  const canvas = document.getElementById('canvas')
-  canvas.width = PIECE_HEIGHT * board.length
-  canvas.height = PIECE_WIDTH * board[0].length
-  const context = canvas.getContext('2d')
-
-  const scoreIndicator = document.getElementById('score-indicator')
 
   board[0][0] = PIECE_TAIL_RIGHT
   board[0][1] = PIECE_TAIL_RIGHT
@@ -80,6 +78,7 @@ window.onload = () => {
   let score = 0
 
   document.addEventListener('keydown', e => {
+    console.log(e)
     switch (e.key) {
     case KEY_MOVE_UP:
       if (direction !== DIRECTION_DOWN) {
@@ -101,6 +100,41 @@ window.onload = () => {
         nextDirection = DIRECTION_RIGHT
       }
       break
+    }
+  })
+
+  let touchStart
+
+  document.addEventListener('touchstart', e => {
+    touchStart = e.changedTouches[0]
+  })
+
+  document.addEventListener('touchmove', e => {
+    const changeX = e.changedTouches[0].clientX - touchStart.clientX
+    const changeY = e.changedTouches[0].clientY - touchStart.clientY
+
+    console.log(Math.floor(changeX), Math.floor(changeY))
+
+    if (Math.abs(changeY) > Math.abs(changeX)) {
+      if (changeY > 0) {
+        if (direction !== DIRECTION_UP) {
+          nextDirection = DIRECTION_DOWN
+        }
+      } else {
+        if (direction !== DIRECTION_DOWN) {
+          nextDirection = DIRECTION_UP
+        }
+      }
+    } else {
+      if (changeX > 0) {
+        if (direction !== DIRECTION_LEFT) {
+          nextDirection = DIRECTION_RIGHT
+        }
+      } else {
+        if (direction !== DIRECTION_RIGHT) {
+          nextDirection = DIRECTION_LEFT
+        }
+      }
     }
   })
 
@@ -142,7 +176,6 @@ window.onload = () => {
     case PIECE_APPLE:
       placeApple(board)
       score++
-      scoreIndicator.innerText = score
       break
     default:
       const tip = board[tailRow][tailCol]
